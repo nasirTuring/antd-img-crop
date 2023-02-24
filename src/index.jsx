@@ -126,6 +126,7 @@ const ImgCrop = forwardRef((props, ref) => {
     beforeCrop,
     children,
     unsplashImageUrl,
+    unsplashImageFile,
 
     cropperProps,
   } = props;
@@ -165,6 +166,22 @@ const ImgCrop = forwardRef((props, ref) => {
         accept: accept || 'image/*',
         beforeUpload: (file, fileList) =>
           new Promise(async (resolve, reject) => {
+            if (unsplashImageFile) {
+              if (beforeCrop && !(await beforeCrop(unsplashImageFile, [unsplashImageFile]))) {
+                reject();
+                return;
+              }
+              fileRef.current = unsplashImageFile;
+              resolveRef.current = resolve;
+              rejectRef.current = reject;
+
+              const reader = new FileReader();
+              reader.addEventListener('load', () => {
+                setSrc(reader.result);
+              });
+              reader.readAsDataURL(unsplashImageFile);
+              return;
+            }
             if (beforeCrop && !(await beforeCrop(file, fileList))) {
               reject();
               return;
@@ -400,7 +417,9 @@ ImgCrop.propTypes = {
   cropperProps: t.object,
 
   children: t.node,
+
   unsplashImageUrl: t.string,
+  unsplashImageFile: t.file,
 };
 
 ImgCrop.defaultProps = {
@@ -414,7 +433,6 @@ ImgCrop.defaultProps = {
   minZoom: 1,
   maxZoom: 3,
   fillColor: 'white',
-  unsplashImageUrl: '',
 };
 
 export default ImgCrop;

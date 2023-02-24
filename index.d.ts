@@ -18,7 +18,8 @@ export interface ImgCropProps {
   modalOk?: string;
   modalCancel?: string;
 
-  unsplashImageUrl?: string
+  unsplashImageUrl?: string;
+  unsplashImageFile?: File;
 
   beforeCrop?: (file: File, fileList: File[]) => boolean;
   cropperProps?: Partial<CropperProps>;
