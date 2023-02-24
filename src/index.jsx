@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef, forwardRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef, forwardRef, useEffect } from 'react';
 import t from 'prop-types';
 import Cropper from 'react-easy-crop';
 import LocaleReceiver from 'antd/es/locale-provider/LocaleReceiver';
@@ -148,8 +148,15 @@ const ImgCrop = forwardRef((props, ref) => {
    */
   const renderUpload = useCallback(() => {
     const upload = Array.isArray(children) ? children[0] : children;
-    const { beforeUpload, accept, ...restUploadProps } = upload.props;
+    const { beforeUpload, accept, unsplashImageUrl, unsplashImageFile , ...restUploadProps } = upload.props;
     beforeUploadRef.current = beforeUpload;
+
+    useEffect(()=>{
+      if (unsplashImageUrl){
+        setSrc(unsplashImageUrl);
+        reader.readAsDataURL(unsplashImageFile);
+      }
+    }, [unsplashImageUrl])
 
     return {
       ...upload,
@@ -162,14 +169,13 @@ const ImgCrop = forwardRef((props, ref) => {
               reject();
               return;
             }
-
             fileRef.current = file;
             resolveRef.current = resolve;
             rejectRef.current = reject;
 
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-              setSrc(reader.result);
+            setSrc(reader.result); 
             });
             reader.readAsDataURL(file);
           }),
