@@ -155,8 +155,7 @@ const ImgCrop = forwardRef((props, ref) => {
    */
   const renderUpload = useCallback(() => {
     const upload = Array.isArray(children) ? children[0] : children;
-    const { beforeUpload, accept, unsplashImageUrl, unsplashImageFile, ...restUploadProps } =
-      upload.props;
+    const { beforeUpload, accept, ...restUploadProps } = upload.props;
     beforeUploadRef.current = beforeUpload;
 
     return {
