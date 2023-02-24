@@ -414,6 +414,7 @@ ImgCrop.defaultProps = {
   minZoom: 1,
   maxZoom: 3,
   fillColor: 'white',
+  unsplashImageUrl: '',
 };
 
 export default ImgCrop;
