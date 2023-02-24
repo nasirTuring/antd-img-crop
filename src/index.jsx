@@ -125,6 +125,7 @@ const ImgCrop = forwardRef((props, ref) => {
 
     beforeCrop,
     children,
+    unsplashImageUrl,
 
     cropperProps,
   } = props;
@@ -143,20 +144,20 @@ const ImgCrop = forwardRef((props, ref) => {
 
   const cropPixelsRef = useRef();
 
+  useEffect(() => {
+    if (unsplashImageUrl) {
+      setSrc(unsplashImageUrl);
+    }
+  }, [unsplashImageUrl]);
+
   /**
    * Upload
    */
   const renderUpload = useCallback(() => {
     const upload = Array.isArray(children) ? children[0] : children;
-    const { beforeUpload, accept, unsplashImageUrl, unsplashImageFile , ...restUploadProps } = upload.props;
+    const { beforeUpload, accept, unsplashImageUrl, unsplashImageFile, ...restUploadProps } =
+      upload.props;
     beforeUploadRef.current = beforeUpload;
-
-    useEffect(()=>{
-      if (unsplashImageUrl){
-        setSrc(unsplashImageUrl);
-        reader.readAsDataURL(unsplashImageFile);
-      }
-    }, [unsplashImageUrl])
 
     return {
       ...upload,
@@ -175,7 +176,7 @@ const ImgCrop = forwardRef((props, ref) => {
 
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-            setSrc(reader.result); 
+              setSrc(reader.result);
             });
             reader.readAsDataURL(file);
           }),
@@ -400,6 +401,7 @@ ImgCrop.propTypes = {
   cropperProps: t.object,
 
   children: t.node,
+  unsplashImageUrl: t.string,
 };
 
 ImgCrop.defaultProps = {
