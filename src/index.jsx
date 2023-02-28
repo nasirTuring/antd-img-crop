@@ -145,12 +145,18 @@ const ImgCrop = forwardRef((props, ref) => {
 
   const cropPixelsRef = useRef();
 
+  const handlePromise = async () => {
+    new Promise(async (resolve, reject) => {
+      resolveRef.current = resolve;
+      rejectRef.current = reject;
+    });
+  };
+
   useEffect(() => {
     if (unsplashImageUrl) {
       setSrc(unsplashImageUrl);
       fileRef.current = unsplashImageFile;
-      resolveRef.current = Promise.resolve();
-      rejectRef.current = Promise.resolve();
+      handlePromise();
     }
   }, [unsplashImageUrl]);
 
