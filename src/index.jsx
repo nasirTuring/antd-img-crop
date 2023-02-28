@@ -148,6 +148,9 @@ const ImgCrop = forwardRef((props, ref) => {
   useEffect(() => {
     if (unsplashImageUrl) {
       setSrc(unsplashImageUrl);
+      fileRef.current = unsplashImageFile;
+      resolveRef.current = Promise.resolve();
+      rejectRef.current = Promise.resolve();
     }
   }, [unsplashImageUrl]);
 
@@ -166,22 +169,6 @@ const ImgCrop = forwardRef((props, ref) => {
         accept: accept || 'image/*',
         beforeUpload: (file, fileList) =>
           new Promise(async (resolve, reject) => {
-            if (unsplashImageFile) {
-              if (beforeCrop && !(await beforeCrop(unsplashImageFile, [unsplashImageFile]))) {
-                reject();
-                return;
-              }
-              fileRef.current = unsplashImageFile;
-              resolveRef.current = resolve;
-              rejectRef.current = reject;
-
-              const reader = new FileReader();
-              reader.addEventListener('load', () => {
-                setSrc(reader.result);
-              });
-              reader.readAsDataURL(unsplashImageFile);
-              return;
-            }
             if (beforeCrop && !(await beforeCrop(file, fileList))) {
               reject();
               return;
